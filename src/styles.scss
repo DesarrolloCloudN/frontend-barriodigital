@@ -1,0 +1,189 @@
+/* Estilos globales — paleta azul/gris, sin diseño elaborado, solo funcional y legible. */
+
+:root {
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-light: #dbeafe;
+
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-400: #94a3b8;
+  --color-gray-600: #475569;
+  --color-gray-900: #0f172a;
+
+  --color-danger: #dc2626;
+  --color-danger-dark: #b91c1c;
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+
+  --radius: 6px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--color-gray-100);
+  color: var(--color-gray-900);
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  line-height: 1.4;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--color-primary-dark);
+}
+
+a {
+  color: var(--color-primary);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--color-gray-200);
+  margin: 1.5rem 0;
+}
+
+/* Contenedores tipo "card" usados por login/dashboard/requests/catalog */
+.dashboard-container,
+.requests-container,
+.catalog-container,
+.login-container {
+  background: #fff;
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+/* Botones (incluye enlaces con clase .btn, ej. accesos del dashboard) */
+button,
+.btn {
+  display: inline-block;
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+  background: var(--color-primary);
+  color: #fff;
+  text-decoration: none;
+  transition: background-color 0.15s ease-in-out;
+}
+
+button:hover:not(:disabled),
+.btn:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+button:disabled,
+.btn:disabled {
+  background: var(--color-gray-400);
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: var(--color-gray-200);
+  color: var(--color-gray-900);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--color-gray-400);
+  color: #fff;
+}
+
+.btn-danger {
+  background: var(--color-danger);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: var(--color-danger-dark);
+}
+
+/* Formularios */
+input,
+textarea,
+select {
+  font: inherit;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--color-gray-400);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--color-gray-900);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+  border-color: var(--color-primary);
+}
+
+/* Tablas */
+table {
+  background: #fff;
+}
+
+thead {
+  background: var(--color-gray-100);
+}
+
+th {
+  color: var(--color-gray-600);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+}
+
+tbody tr:hover {
+  background: var(--color-gray-50);
+}
+
+/* Mensajes de error */
+.error {
+  background: #fef2f2;
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger-dark);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.75rem;
+}
+
+/* Badges de estado de trámite */
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--color-gray-400);
+}
+
+.badge-ingresado {
+  background: var(--color-gray-600);
+}
+.badge-admitido {
+  background: var(--color-primary);
+}
+.badge-en_gestion {
+  background: var(--color-warning);
+}
+.badge-en_terreno {
+  background: var(--color-warning);
+}
+.badge-resuelto {
+  background: var(--color-success);
+}
+.badge-rechazado {
+  background: var(--color-danger);
+}
