@@ -1,0 +1,160 @@
+<div class="catalog-container">
+  <h1>Catálogo de trámites</h1>
+
+  <p><a routerLink="/dashboard">&larr; Volver al dashboard</a></p>
+
+  <!-- Formulario para crear un nuevo tipo de trámite, solo visible para el Admin. -->
+  @if (esAdmin) {
+    <section class="crear-tipo">
+      <h2>Nuevo tipo de trámite</h2>
+
+      <form (ngSubmit)="crearTipoTramite()">
+        <label>
+          Nombre:
+          <input type="text" name="nombre" [(ngModel)]="nuevoNombre" required />
+        </label>
+
+        <label>
+          Descripción:
+          <textarea
+            name="descripcion"
+            [(ngModel)]="nuevaDescripcion"
+            rows="2"
+          ></textarea>
+        </label>
+
+        <label>
+          Requisitos:
+          <textarea
+            name="requisitos"
+            [(ngModel)]="nuevosRequisitos"
+            rows="2"
+          ></textarea>
+        </label>
+
+        <label>
+          Cupo diario:
+          <input
+            type="number"
+            name="cupoDiario"
+            [(ngModel)]="nuevoCupoDiario"
+            min="1"
+            required
+          />
+        </label>
+
+        <button type="submit" class="btn btn-primary" [disabled]="creando()">
+          {{ creando() ? 'Creando...' : 'Crear tipo de trámite' }}
+        </button>
+      </form>
+
+      @if (errorCreacion()) {
+        <p class="error">{{ errorCreacion() }}</p>
+      }
+    </section>
+
+    <hr />
+  }
+
+  <!-- Tabla con la lista de tipos de trámite existentes. -->
+  <section class="lista-tipos">
+    @if (cargando()) {
+      <p>Cargando...</p>
+    }
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    @if (!cargando() && tipos().length === 0) {
+      <p>No hay tipos de trámite registrados.</p>
+    }
+
+    @if (tipos().length > 0) {
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Cupo diario</th>
+            <th>Cupo disponible hoy</th>
+            <th>Activo</th>
+            @if (puedeEditar) {
+              <th>Acciones</th>
+            }
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (tipo of tipos(); track tipo.id) {
+            <tr>
+              <td>{{ tipo.nombre }}</td>
+
+              <!-- Si esta fila está en modo edición, muestra un input; si no, muestra el valor. -->
+              @if (idEnEdicion() === tipo.id) {
+                <td>
+                  <input
+                    type="number"
+                    [(ngModel)]="edicionCupoDiario"
+                    name="edicionCupoDiario-{{ tipo.id }}"
+                    min="1"
+                  />
+                </td>
+              } @else {
+                <td>{{ tipo.cupoDiario }}</td>
+              }
+
+              <td>{{ tipo.cupoDisponibleHoy }}</td>
+
+              @if (idEnEdicion() === tipo.id) {
+                <td>
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="edicionActivo"
+                    name="edicionActivo-{{ tipo.id }}"
+                  />
+                </td>
+              } @else {
+                <td>{{ tipo.activo ? 'Sí' : 'No' }}</td>
+              }
+
+              <!-- Columna de acciones (editar, guardar, eliminar), solo para quien puede editar. -->
+              @if (puedeEditar) {
+                <td class="acciones">
+                  @if (idEnEdicion() === tipo.id) {
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      [disabled]="guardando()"
+                      (click)="guardarEdicion(tipo)"
+                    >
+                      Guardar
+                    </button>
+
+                    <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">
+                      Cancelar
+                    </button>
+                  } @else {
+                    <button type="button" class="btn btn-secondary" (click)="iniciarEdicion(tipo)">
+                      Editar
+                    </button>
+
+                    @if (esAdmin) {
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        [disabled]="eliminandoId() === tipo.id"
+                        (click)="eliminarTipoTramite(tipo)"
+                      >
+                        Eliminar
+                      </button>
+                    }
+                  }
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </section>
+</div>
