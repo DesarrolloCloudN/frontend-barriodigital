@@ -1,0 +1,113 @@
+<div class="requests-container">
+  <h1>Trámites</h1>
+
+  <p><a routerLink="/dashboard">&larr; Volver al dashboard</a></p>
+
+  <!-- Formulario para crear un nuevo trámite. -->
+  <section class="crear-tramite">
+    <h2>Nuevo trámite</h2>
+
+    <form (ngSubmit)="crearTramite()">
+      <label>
+        Tipo de trámite (id):
+        <input
+          type="number"
+          name="tipoTramiteId"
+          [(ngModel)]="nuevoTipoTramiteId"
+          min="1"
+          required
+        />
+      </label>
+
+      <label>
+        Descripción:
+        <textarea
+          name="descripcion"
+          [(ngModel)]="nuevaDescripcion"
+          rows="3"
+          required
+        ></textarea>
+      </label>
+
+      <button type="submit" class="btn btn-primary" [disabled]="creando()">
+        {{ creando() ? 'Creando...' : 'Crear trámite' }}
+      </button>
+    </form>
+
+    @if (errorCreacion()) {
+      <p class="error">{{ errorCreacion() }}</p>
+    }
+  </section>
+
+  <hr />
+
+  <!-- Tabla con los trámites: todos si puede gestionar, o solo los propios si es un vecino. -->
+  <section class="lista-tramites">
+    <h2>{{ puedeGestionar ? 'Todos los trámites' : 'Mis trámites' }}</h2>
+
+    @if (cargando()) {
+      <p>Cargando...</p>
+    }
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    @if (!cargando() && tramites().length === 0) {
+      <p>No hay trámites para mostrar.</p>
+    }
+
+    @if (tramites().length > 0) {
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Fecha ingreso</th>
+            @if (puedeGestionar) {
+              <th>Cambiar estado</th>
+            }
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (tramite of tramites(); track tramite.id) {
+            <tr>
+              <td>{{ tramite.id }}</td>
+              <td>{{ tramite.tipoTramiteId }}</td>
+              <td>{{ tramite.descripcion }}</td>
+              <td>
+                <span class="badge badge-{{ tramite.estado.toLowerCase() }}">{{ tramite.estado }}</span>
+              </td>
+              <td>{{ tramite.fechaIngreso | date: 'short' }}</td>
+
+              <!-- Botones para cambiar de estado, solo se muestran las transiciones válidas. -->
+              @if (puedeGestionar) {
+                <td class="acciones-estado">
+                  @for (opcion of transicionesValidas(tramite.estado); track opcion) {
+                    <button
+                      type="button"
+                      class="btn"
+                      [class.btn-danger]="opcion === 'RECHAZADO'"
+                      [class.btn-secondary]="opcion !== 'RECHAZADO'"
+                      [disabled]="actualizandoEstadoId() === tramite.id"
+                      (click)="cambiarEstado(tramite, opcion)"
+                    >
+                      {{ opcion }}
+                    </button>
+                  }
+
+                  @if (transicionesValidas(tramite.estado).length === 0) {
+                    <span>(estado final)</span>
+                  }
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </section>
+</div>
