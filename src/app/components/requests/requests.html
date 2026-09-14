@@ -3,7 +3,6 @@
 
   <p><a routerLink="/dashboard">&larr; Volver al dashboard</a></p>
 
-  <!-- Formulario para crear un nuevo trámite. -->
   <section class="crear-tramite">
     <h2>Nuevo trámite</h2>
 
@@ -41,7 +40,6 @@
 
   <hr />
 
-  <!-- Tabla con los trámites: todos si puede gestionar, o solo los propios si es un vecino. -->
   <section class="lista-tramites">
     <h2>{{ puedeGestionar ? 'Todos los trámites' : 'Mis trámites' }}</h2>
 
@@ -83,7 +81,6 @@
               </td>
               <td>{{ tramite.fechaIngreso | date: 'short' }}</td>
 
-              <!-- Botones para cambiar de estado, solo se muestran las transiciones válidas. -->
               @if (puedeGestionar) {
                 <td class="acciones-estado">
                   @for (opcion of transicionesValidas(tramite.estado); track opcion) {

@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RequestsComponent } from './requests';
 
-// Prueba básica de que el componente de trámites se crea correctamente.
 describe('RequestsComponent', () => {
   let component: RequestsComponent;
   let fixture: ComponentFixture<RequestsComponent>;

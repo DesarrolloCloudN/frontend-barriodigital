@@ -1,7 +1,6 @@
 <div class="dashboard-container">
   <h1>BarrioDigital</h1>
 
-  <!-- Muestra el nombre del usuario logueado, si existe. -->
   @if (account) {
     <p>
       Usuario:
@@ -9,7 +8,6 @@
     </p>
   }
 
-  <!-- Muestra los roles que trae el token, o un aviso si no tiene ninguno. -->
   @if (roles.length > 0) {
     <p>
       Rol(es):
@@ -26,7 +24,6 @@
   <nav class="accesos">
     <a class="btn btn-primary" routerLink="/requests">Trámites</a>
 
-    <!-- El enlace al catálogo solo aparece para Admin o Funcionario. -->
     @if (puedeVerCatalogo) {
       <a class="btn btn-secondary" routerLink="/catalog">Catálogo de trámites</a>
     }

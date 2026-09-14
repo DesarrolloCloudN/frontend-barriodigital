@@ -3,9 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 
 import { AuthService } from '../services/auth.service';
 
-// Guard de rutas: revisa si el usuario tiene alguno de los roles permitidos para esa ruta
-// (los roles se definen en app.routes.ts dentro de la propiedad "data"). Si no tiene el rol,
-// lo redirige al dashboard y bloquea el acceso.
+// Guard de rutas: si el usuario no tiene el rol permitido, lo redirige al dashboard.
 export const roleGuard: CanActivateFn = (route) => {
   const authService = inject(AuthService);
   const router = inject(Router);

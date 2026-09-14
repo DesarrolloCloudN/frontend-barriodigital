@@ -3,8 +3,7 @@ import { Router, RouterOutlet } from '@angular/router';
 
 import { MsalService } from '@azure/msal-angular';
 
-// Componente raíz de la aplicación. Se encarga de manejar el resultado del login con Microsoft
-// (MSAL) apenas se carga la app, y de redirigir al usuario al dashboard si corresponde.
+// Componente raíz: maneja el resultado del login MSAL y redirige al dashboard.
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
@@ -15,9 +14,8 @@ export class App implements OnInit {
   private msalService = inject(MsalService);
   private router = inject(Router);
 
-  // Se ejecuta apenas se crea el componente raíz (o sea, al cargar la app).
   ngOnInit(): void {
-    // Cuando Microsoft redirige de vuelta después del login, este observable entrega el resultado.
+    // El resultado del login llega por este observable cuando Microsoft redirige de vuelta.
     this.msalService.handleRedirectObservable().subscribe({
       next: (result) => {
         if (result?.account) {
@@ -34,7 +32,6 @@ export class App implements OnInit {
       },
     });
 
-    // Si ya existe una sesión, establecemos la cuenta activa.
     const accounts = this.msalService.instance.getAllAccounts();
 
     if (accounts.length > 0) {

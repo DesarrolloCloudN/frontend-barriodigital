@@ -9,7 +9,6 @@ export interface TipoTramite {
   activo: boolean;
 }
 
-// Datos que se envían al backend para crear un nuevo tipo de trámite.
 export interface CrearTipoTramiteDto {
   nombre: string;
   descripcion: string;
@@ -17,7 +16,6 @@ export interface CrearTipoTramiteDto {
   cupoDiario: number;
 }
 
-// Datos que se envían al backend para actualizar un tipo de trámite existente.
 export interface ActualizarTipoTramiteDto {
   nombre: string;
   descripcion: string;

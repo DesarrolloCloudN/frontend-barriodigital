@@ -11,8 +11,7 @@ import {
   Tramite,
 } from '../../models/tramite.model';
 
-// Pantalla de trámites. Un vecino ve y crea sus propios trámites; un Admin o Funcionario
-// ve todos los trámites y además puede cambiarles el estado (INGRESADO, ADMITIDO, etc.).
+// Trámites: el vecino ve los suyos; Admin ve todos y cambia estados.
 @Component({
   selector: 'app-requests',
   standalone: true,
@@ -24,8 +23,7 @@ export class RequestsComponent implements OnInit {
   private authService = inject(AuthService);
   private apiService = inject(ApiService);
 
-  // Admin o Funcionario pueden ver todos los trámites y gestionar sus estados.
-  puedeGestionar = this.authService.hasAnyRole(['Admin', 'Funcionario']);
+  puedeGestionar = this.authService.hasRole('Admin');
 
   tramites = signal<Tramite[]>([]);
 
@@ -33,22 +31,18 @@ export class RequestsComponent implements OnInit {
 
   error = signal('');
 
-  // Formulario de creación.
   nuevoTipoTramiteId: number | null = null;
   nuevaDescripcion = '';
   creando = signal(false);
   errorCreacion = signal('');
 
-  // Trámite cuyo estado se está cambiando (para deshabilitar botones mientras dura la llamada).
   actualizandoEstadoId = signal<number | null>(null);
 
-  // Al entrar a la pantalla, carga la lista de trámites.
   ngOnInit(): void {
     this.cargarTramites();
   }
 
-  // Pide al backend la lista de trámites: si el usuario puede gestionar, trae todos;
-  // si no, trae solo los suyos.
+  // Trae todos los trámites si puede gestionar, o solo los propios si no.
   cargarTramites(): void {
     this.cargando.set(true);
     this.error.set('');
@@ -70,7 +64,6 @@ export class RequestsComponent implements OnInit {
     });
   }
 
-  // Crea un trámite nuevo con los datos del formulario, validando antes que estén completos.
   crearTramite(): void {
     if (!this.nuevoTipoTramiteId || !this.nuevaDescripcion.trim()) {
       this.errorCreacion.set('Debes indicar el tipo de trámite y una descripción.');
@@ -100,15 +93,11 @@ export class RequestsComponent implements OnInit {
       });
   }
 
-  // Devuelve a qué estados se puede pasar desde el estado actual, según la máquina de
-  // estados definida en el modelo (por ejemplo, desde INGRESADO solo se puede pasar a
-  // ADMITIDO o RECHAZADO). Se usa para mostrar solo los botones de transición válidos.
+  // Transiciones válidas desde el estado actual, según la máquina de estados del modelo.
   transicionesValidas(estado: EstadoTramite): EstadoTramite[] {
     return TRANSICIONES_ESTADO[estado];
   }
 
-  // Cambia el estado de un trámite (por ejemplo, de INGRESADO a ADMITIDO) y actualiza la
-  // lista en pantalla con el trámite ya actualizado.
   cambiarEstado(tramite: Tramite, nuevoEstado: EstadoTramite): void {
     this.actualizandoEstadoId.set(tramite.id);
     this.error.set('');
@@ -130,7 +119,7 @@ export class RequestsComponent implements OnInit {
       });
   }
 
-  // Convierte un error HTTP en un mensaje simple y entendible para mostrar en pantalla.
+  // Traduce errores 403/409 del backend a mensajes legibles.
   private formatearError(err: unknown): string {
     const httpError = err as { status?: number; statusText?: string };
 

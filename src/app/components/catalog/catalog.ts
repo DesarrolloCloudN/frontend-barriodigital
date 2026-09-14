@@ -6,8 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { ApiService } from '../../services/api.service';
 import { TipoTramite } from '../../models/tipo-tramite.model';
 
-// Pantalla del catálogo de tipos de trámite. Un Admin puede crear, editar y eliminar tipos
-// de trámite; un Funcionario solo puede editarlos; cualquier otro rol solo los ve en modo lectura.
+// Catálogo de tipos de trámite: solo Admin puede crear, editar o eliminar.
 @Component({
   selector: 'app-catalog',
   standalone: true,
@@ -19,11 +18,7 @@ export class CatalogComponent implements OnInit {
   private authService = inject(AuthService);
   private apiService = inject(ApiService);
 
-  // Solo el Admin puede crear y eliminar tipos de trámite.
   esAdmin = this.authService.hasRole('Admin');
-
-  // Admin y Funcionario pueden editar los tipos de trámite existentes.
-  puedeEditar = this.authService.hasAnyRole(['Admin', 'Funcionario']);
 
   tipos = signal<TipoTramite[]>([]);
 
@@ -31,7 +26,6 @@ export class CatalogComponent implements OnInit {
 
   error = signal('');
 
-  // Formulario de creación (solo Admin).
   nuevoNombre = '';
   nuevaDescripcion = '';
   nuevosRequisitos = '';
@@ -39,7 +33,6 @@ export class CatalogComponent implements OnInit {
   creando = signal(false);
   errorCreacion = signal('');
 
-  // Edición inline.
   idEnEdicion = signal<number | null>(null);
   edicionCupoDiario: number | null = null;
   edicionActivo = true;
@@ -47,12 +40,10 @@ export class CatalogComponent implements OnInit {
 
   eliminandoId = signal<number | null>(null);
 
-  // Al entrar a la pantalla, carga el catálogo de tipos de trámite.
   ngOnInit(): void {
     this.cargarCatalogo();
   }
 
-  // Pide al backend la lista completa de tipos de trámite.
   cargarCatalogo(): void {
     this.cargando.set(true);
     this.error.set('');
@@ -70,7 +61,6 @@ export class CatalogComponent implements OnInit {
     });
   }
 
-  // Crea un nuevo tipo de trámite con los datos del formulario (solo disponible para Admin).
   crearTipoTramite(): void {
     if (!this.nuevoNombre.trim() || !this.nuevoCupoDiario) {
       this.errorCreacion.set('Debes indicar al menos el nombre y el cupo diario.');
@@ -104,20 +94,16 @@ export class CatalogComponent implements OnInit {
       });
   }
 
-  // Activa el modo edición inline para la fila del tipo de trámite indicado, precargando
-  // sus valores actuales en los campos editables.
   iniciarEdicion(tipo: TipoTramite): void {
     this.idEnEdicion.set(tipo.id);
     this.edicionCupoDiario = tipo.cupoDiario;
     this.edicionActivo = tipo.activo;
   }
 
-  // Sale del modo edición sin guardar cambios.
   cancelarEdicion(): void {
     this.idEnEdicion.set(null);
   }
 
-  // Guarda los cambios hechos en la edición inline de un tipo de trámite.
   guardarEdicion(tipo: TipoTramite): void {
     if (!this.edicionCupoDiario) {
       return;
@@ -150,7 +136,7 @@ export class CatalogComponent implements OnInit {
       });
   }
 
-  // Elimina un tipo de trámite del catálogo (solo disponible para Admin).
+  // Solo Admin puede eliminar (la UI oculta el botón para los demás roles).
   eliminarTipoTramite(tipo: TipoTramite): void {
     this.eliminandoId.set(tipo.id);
     this.error.set('');
@@ -168,7 +154,7 @@ export class CatalogComponent implements OnInit {
     });
   }
 
-  // Convierte un error HTTP en un mensaje simple y entendible para mostrar en pantalla.
+  // Traduce errores 403/409 del backend a mensajes legibles.
   private formatearError(err: unknown): string {
     const httpError = err as { status?: number; statusText?: string };
 

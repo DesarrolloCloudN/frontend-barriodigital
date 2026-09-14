@@ -7,7 +7,6 @@ export type EstadoTramite =
   | 'RESUELTO'
   | 'RECHAZADO';
 
-// Representa un trámite tal como llega desde el backend.
 export interface Tramite {
   id: number;
   tipoTramiteId: number;
@@ -15,13 +14,12 @@ export interface Tramite {
   vecinoNombre: string;
   descripcion: string;
   estado: EstadoTramite;
-  funcionarioAsignado?: string | null;
+  responsableAsignado?: string | null;
   observaciones?: string | null;
   fechaIngreso: string;
   fechaActualizacion: string;
 }
 
-// Datos que se envían al backend para crear un nuevo trámite.
 export interface CrearTramiteDto {
   tipoTramiteId: number;
   descripcion: string;
@@ -29,17 +27,13 @@ export interface CrearTramiteDto {
   vecinoNombre?: string;
 }
 
-// Datos que se envían al backend para cambiar el estado de un trámite.
 export interface CambiarEstadoTramiteDto {
   estado: EstadoTramite;
-  funcionarioAsignado?: string;
+  responsableAsignado?: string;
   observaciones?: string;
 }
 
-/**
- * Máquina de estados del trámite (sección 5 del contrato). Se replica aquí solo para
- * habilitar/deshabilitar transiciones en la UI; la validación real vive en el backend.
- */
+// Máquina de estados del trámite, solo para habilitar/deshabilitar botones en la UI.
 export const TRANSICIONES_ESTADO: Record<EstadoTramite, EstadoTramite[]> = {
   INGRESADO: ['ADMITIDO', 'RECHAZADO'],
   ADMITIDO: ['EN_GESTION', 'RECHAZADO'],

@@ -4,10 +4,9 @@ import { MsalGuard } from '@azure/msal-angular';
 import { LoginComponent } from './components/login/login';
 import { roleGuard } from './guards/role.guard';
 
-// Aquí se definen todas las rutas (pantallas) de la aplicación y quién puede entrar a cada una.
+// Define las rutas de la app y quién puede acceder a cada una.
 export const routes: Routes = [
   {
-    // Si entran a la raíz del sitio, los mandamos directo al login.
     path: '',
     redirectTo: 'login',
     pathMatch: 'full',
@@ -19,7 +18,7 @@ export const routes: Routes = [
   },
 
   {
-    // MsalGuard exige que el usuario haya iniciado sesión para poder ver el dashboard.
+    // MsalGuard exige sesión iniciada para ver el dashboard.
     path: 'dashboard',
     canActivate: [MsalGuard],
     loadComponent: () =>
@@ -29,7 +28,6 @@ export const routes: Routes = [
   },
 
   {
-    // También requiere sesión iniciada.
     path: 'requests',
     canActivate: [MsalGuard],
     loadComponent: () =>
@@ -39,16 +37,15 @@ export const routes: Routes = [
   },
 
   {
-    // El catálogo además requiere el rol Admin o Funcionario (lo valida roleGuard usando data.roles).
+    // El catálogo requiere rol Admin (lo valida roleGuard).
     path: 'catalog',
     canActivate: [MsalGuard, roleGuard],
-    data: { roles: ['Admin', 'Funcionario'] },
+    data: { roles: ['Admin'] },
     loadComponent: () =>
       import('./components/catalog/catalog').then((m) => m.CatalogComponent),
   },
 
   {
-    // Cualquier ruta que no exista cae aquí y se redirige al login.
     path: '**',
     redirectTo: 'login',
   },

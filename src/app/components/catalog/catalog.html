@@ -3,7 +3,6 @@
 
   <p><a routerLink="/dashboard">&larr; Volver al dashboard</a></p>
 
-  <!-- Formulario para crear un nuevo tipo de trámite, solo visible para el Admin. -->
   @if (esAdmin) {
     <section class="crear-tipo">
       <h2>Nuevo tipo de trámite</h2>
@@ -56,7 +55,6 @@
     <hr />
   }
 
-  <!-- Tabla con la lista de tipos de trámite existentes. -->
   <section class="lista-tipos">
     @if (cargando()) {
       <p>Cargando...</p>
@@ -78,7 +76,7 @@
             <th>Cupo diario</th>
             <th>Cupo disponible hoy</th>
             <th>Activo</th>
-            @if (puedeEditar) {
+            @if (esAdmin) {
               <th>Acciones</th>
             }
           </tr>
@@ -89,7 +87,6 @@
             <tr>
               <td>{{ tipo.nombre }}</td>
 
-              <!-- Si esta fila está en modo edición, muestra un input; si no, muestra el valor. -->
               @if (idEnEdicion() === tipo.id) {
                 <td>
                   <input
@@ -117,8 +114,7 @@
                 <td>{{ tipo.activo ? 'Sí' : 'No' }}</td>
               }
 
-              <!-- Columna de acciones (editar, guardar, eliminar), solo para quien puede editar. -->
-              @if (puedeEditar) {
+              @if (esAdmin) {
                 <td class="acciones">
                   @if (idEnEdicion() === tipo.id) {
                     <button
@@ -138,16 +134,14 @@
                       Editar
                     </button>
 
-                    @if (esAdmin) {
-                      <button
-                        type="button"
-                        class="btn btn-danger"
-                        [disabled]="eliminandoId() === tipo.id"
-                        (click)="eliminarTipoTramite(tipo)"
-                      >
-                        Eliminar
-                      </button>
-                    }
+                    <button
+                      type="button"
+                      class="btn btn-danger"
+                      [disabled]="eliminandoId() === tipo.id"
+                      (click)="eliminarTipoTramite(tipo)"
+                    >
+                      Eliminar
+                    </button>
                   }
                 </td>
               }

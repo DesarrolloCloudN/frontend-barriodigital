@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginComponent } from './login';
 
-// Prueba básica de que el componente de login se crea correctamente.
 describe('Login', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
