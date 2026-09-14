@@ -1,59 +1,64 @@
-# FrontendMsal
+# BarrioDigital — Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.1.
+Frontend en Angular del sistema BarrioDigital (gestión de trámites vecinales), parte de la Evaluación Parcial 1
+de Desarrollo Cloud Native I. Usa MSAL para autenticarse contra Microsoft Entra ID y consume el BFF a través de
+AWS API Gateway.
 
-## Development server
+Este proyecto se generó con [Angular CLI](https://github.com/angular/angular-cli) versión 21.2.1.
 
-To start a local development server, run:
+## Roles
+
+- **Admin**: gestiona el catálogo de tipos de trámite, admite solicitudes y cambia el estado de los trámites.
+- **Vecino**: ingresa y sigue únicamente sus propias solicitudes.
+
+## Configuración previa
+
+Antes de levantar el proyecto hay que completar los datos de Microsoft Entra ID y del API Gateway en
+`src/environments/environment.ts` (los campos marcados como `TODO-CONFIG`).
+
+## Servidor de desarrollo
+
+Para levantar un servidor local, ejecutar:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Con el servidor corriendo, abrir el navegador en `http://localhost:4200/`. La aplicación se recarga sola cada vez
+que se modifica el código fuente.
 
-## Code scaffolding
+## Generar componentes
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Para generar un componente nuevo:
 
 ```bash
-ng generate component component-name
+ng generate component nombre-del-componente
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Para ver todos los esquemas disponibles (componentes, directivas, pipes, etc.):
 
 ```bash
 ng generate --help
 ```
 
-## Building
+## Compilar
 
-To build the project run:
+Para compilar el proyecto:
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Esto genera los archivos de producción en la carpeta `dist/`.
 
-## Running unit tests
+## Pruebas unitarias
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Para ejecutar las pruebas unitarias con [Vitest](https://vitest.dev/):
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+## Recursos adicionales
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Más información sobre Angular CLI en la [documentación oficial](https://angular.dev/tools/cli).
