@@ -3,7 +3,7 @@
 
   <p><a routerLink="/dashboard">&larr; Volver al dashboard</a></p>
 
-  @if (esAdmin) {
+  @if (esAdmin()) {
     <section class="crear-tipo">
       <h2>Nuevo tipo de trámite</h2>
 
@@ -76,7 +76,7 @@
             <th>Cupo diario</th>
             <th>Cupo disponible hoy</th>
             <th>Activo</th>
-            @if (puedeEditar) {
+            @if (puedeEditar()) {
               <th>Acciones</th>
             }
           </tr>
@@ -114,7 +114,7 @@
                 <td>{{ tipo.activo ? 'Sí' : 'No' }}</td>
               }
 
-              @if (puedeEditar) {
+              @if (puedeEditar()) {
                 <td class="acciones">
                   @if (idEnEdicion() === tipo.id) {
                     <button
@@ -134,7 +134,7 @@
                       Editar
                     </button>
 
-                    @if (esAdmin) {
+                    @if (esAdmin()) {
                       <button
                         type="button"
                         class="btn btn-danger"

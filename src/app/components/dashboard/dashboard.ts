@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
@@ -16,9 +16,11 @@ export class DashboardComponent {
 
   account = this.authService.getAccount();
 
-  roles = this.authService.getRoles();
+  roles = this.authService.roles;
 
-  puedeVerCatalogo = this.authService.hasAnyRole(['Admin', 'Funcionario']);
+  puedeVerCatalogo = computed(() =>
+    this.authService.roles().some((rol) => ['Admin', 'Funcionario'].includes(rol))
+  );
 
   logout(): void {
     this.authService.logout();

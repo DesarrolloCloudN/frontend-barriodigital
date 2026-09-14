@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
 import { environment } from '../../environments/environment';
 
@@ -28,7 +28,9 @@ export class AuthService {
     return this.msalService.instance.getActiveAccount();
   }
 
-  private cachedRoles: string[] = [];
+  // Signal (no campo plano) para que las vistas se actualicen solas apenas
+  // termine de cargar, aunque el componente se haya construido antes.
+  private rolesSignal = signal<string[]>([]);
 
   // Los roles se asignan sobre la app del BFF, asi que solo aparecen en el
   // access token de esa API, no en el idToken del login. Se piden aparte y se cachean.
@@ -36,7 +38,7 @@ export class AuthService {
     const account = this.getAccount();
 
     if (!account) {
-      this.cachedRoles = [];
+      this.rolesSignal.set([]);
       return;
     }
 
@@ -46,9 +48,9 @@ export class AuthService {
         account,
       });
 
-      this.cachedRoles = this.decodeRolesFromAccessToken(result.accessToken);
+      this.rolesSignal.set(this.decodeRolesFromAccessToken(result.accessToken));
     } catch {
-      this.cachedRoles = [];
+      this.rolesSignal.set([]);
     }
   }
 
@@ -66,8 +68,11 @@ export class AuthService {
     return Array.isArray(roles) ? (roles as string[]) : [];
   }
 
+  // Se expone de solo lectura para que los componentes puedan leerlo como signal.
+  readonly roles = this.rolesSignal.asReadonly();
+
   getRoles(): string[] {
-    return this.cachedRoles;
+    return this.rolesSignal();
   }
 
   hasRole(role: string): boolean {

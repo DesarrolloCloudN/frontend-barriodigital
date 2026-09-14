@@ -8,10 +8,10 @@
     </p>
   }
 
-  @if (roles.length > 0) {
+  @if (roles().length > 0) {
     <p>
       Rol(es):
-      <strong>{{ roles.join(', ') }}</strong>
+      <strong>{{ roles().join(', ') }}</strong>
     </p>
   } @else {
     <p><strong>Sin roles asignados en el token.</strong></p>
@@ -24,7 +24,7 @@
   <nav class="accesos">
     <a class="btn btn-primary" routerLink="/requests">Trámites</a>
 
-    @if (puedeVerCatalogo) {
+    @if (puedeVerCatalogo()) {
       <a class="btn btn-secondary" routerLink="/catalog">Catálogo de trámites</a>
     }
   </nav>

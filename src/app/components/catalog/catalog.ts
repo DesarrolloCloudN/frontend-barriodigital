@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -18,9 +18,11 @@ export class CatalogComponent implements OnInit {
   private authService = inject(AuthService);
   private apiService = inject(ApiService);
 
-  esAdmin = this.authService.hasRole('Admin');
+  esAdmin = computed(() => this.authService.roles().includes('Admin'));
 
-  puedeEditar = this.authService.hasAnyRole(['Admin', 'Funcionario']);
+  puedeEditar = computed(() =>
+    this.authService.roles().some((rol) => ['Admin', 'Funcionario'].includes(rol))
+  );
 
   tipos = signal<TipoTramite[]>([]);
 

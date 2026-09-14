@@ -41,7 +41,7 @@
   <hr />
 
   <section class="lista-tramites">
-    <h2>{{ puedeGestionar ? 'Todos los trámites' : 'Mis trámites' }}</h2>
+    <h2>{{ puedeGestionar() ? 'Todos los trámites' : 'Mis trámites' }}</h2>
 
     @if (cargando()) {
       <p>Cargando...</p>
@@ -64,7 +64,7 @@
             <th>Descripción</th>
             <th>Estado</th>
             <th>Fecha ingreso</th>
-            @if (puedeGestionar) {
+            @if (puedeGestionar()) {
               <th>Cambiar estado</th>
             }
           </tr>
@@ -81,7 +81,7 @@
               </td>
               <td>{{ tramite.fechaIngreso | date: 'short' }}</td>
 
-              @if (puedeGestionar) {
+              @if (puedeGestionar()) {
                 <td class="acciones-estado">
                   @for (opcion of transicionesValidas(tramite.estado); track opcion) {
                     <button

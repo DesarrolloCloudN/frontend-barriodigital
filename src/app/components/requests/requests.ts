@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -19,11 +19,13 @@ import {
   templateUrl: './requests.html',
   styleUrl: './requests.scss',
 })
-export class RequestsComponent implements OnInit {
+export class RequestsComponent {
   private authService = inject(AuthService);
   private apiService = inject(ApiService);
 
-  puedeGestionar = this.authService.hasAnyRole(['Admin', 'Funcionario']);
+  puedeGestionar = computed(() =>
+    this.authService.roles().some((rol) => ['Admin', 'Funcionario'].includes(rol))
+  );
 
   tramites = signal<Tramite[]>([]);
 
@@ -38,8 +40,13 @@ export class RequestsComponent implements OnInit {
 
   actualizandoEstadoId = signal<number | null>(null);
 
-  ngOnInit(): void {
-    this.cargarTramites();
+  // Se usa effect (no ngOnInit) porque puedeGestionar depende de los roles,
+  // que pueden llegar despues de que este componente ya se construyo.
+  constructor() {
+    effect(() => {
+      this.puedeGestionar();
+      this.cargarTramites();
+    });
   }
 
   // Trae todos los trámites si puede gestionar, o solo los propios si no.
@@ -47,7 +54,7 @@ export class RequestsComponent implements OnInit {
     this.cargando.set(true);
     this.error.set('');
 
-    const consulta$ = this.puedeGestionar
+    const consulta$ = this.puedeGestionar()
       ? this.apiService.getTodosTramites()
       : this.apiService.getMisTramites();
 
