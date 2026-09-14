@@ -43,13 +43,17 @@ export class AuthService {
     }
 
     try {
+      // MSAL exige inicializar la instancia antes de usarla directamente (no via guard/interceptor).
+      await this.msalService.instance.initialize();
+
       const result = await this.msalService.instance.acquireTokenSilent({
         scopes: [environment.azure.api.scope],
         account,
       });
 
       this.rolesSignal.set(this.decodeRolesFromAccessToken(result.accessToken));
-    } catch {
+    } catch (error) {
+      console.error('No se pudo obtener el access token de la API para leer roles:', error);
       this.rolesSignal.set([]);
     }
   }
