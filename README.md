@@ -12,10 +12,15 @@ Este proyecto se generó con [Angular CLI](https://github.com/angular/angular-cl
 - **Funcionario**: admite solicitudes, cambia el estado de los trámites y actualiza cupos.
 - **Vecino**: ingresa y sigue únicamente sus propias solicitudes.
 
-## Configuración previa
+## Configuración
 
-Antes de levantar el proyecto hay que completar los datos de Microsoft Entra ID y del API Gateway en
-`src/environments/environment.ts` (los campos marcados como `TODO-CONFIG`).
+Los datos de Microsoft Entra ID y la URL del API Gateway ya están completos en
+`src/environments/environment.ts`, listo para compilar y ejecutar directamente.
+
+## Despliegue
+
+La app compilada (`ng build`) se sirve con nginx en una instancia EC2, con HTTPS (Let's Encrypt):
+`https://100.55.196.116.nip.io/`
 
 ## Servidor de desarrollo
 
