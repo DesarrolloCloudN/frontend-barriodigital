@@ -2,17 +2,17 @@ export const environment = {
   production: false,
 
   azure: {
-    clientId: 'TODO-CONFIG', // Client ID del App Registration del SPA Angular
-    tenantId: 'TODO-CONFIG', // Tenant ID de Microsoft Entra ID
+    clientId: 'b651ec94-94de-4296-b10c-c16eccf8a5aa',
+    tenantId: 'b993433f-439b-4f1b-a920-b4d91d2d8329',
 
-    authority: 'TODO-CONFIG', // https://login.microsoftonline.com/<TENANT_ID>
+    authority: 'https://login.microsoftonline.com/b993433f-439b-4f1b-a920-b4d91d2d8329',
 
     redirectUri: 'http://localhost:4200/',
 
     api: {
-      clientId: 'TODO-CONFIG', // Client ID del App Registration del BFF
+      clientId: 'b3c7c3d4-427e-41c2-a2f1-f333156f1c81',
 
-      scope: 'api://TODO-CONFIG/access_as_user',
+      scope: 'api://b3c7c3d4-427e-41c2-a2f1-f333156f1c81/access_as_user',
 
       url: 'TODO-CONFIG', // URL de invocación del API Gateway (stage Desarrollo)
     },
