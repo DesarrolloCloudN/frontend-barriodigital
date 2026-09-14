@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 
 import { MsalService } from '@azure/msal-angular';
+import { AuthService } from './services/auth.service';
 
 // Componente raíz: maneja el resultado del login MSAL y redirige al dashboard.
 @Component({
@@ -12,16 +13,20 @@ import { MsalService } from '@azure/msal-angular';
 })
 export class App implements OnInit {
   private msalService = inject(MsalService);
+  private authService = inject(AuthService);
   private router = inject(Router);
 
   ngOnInit(): void {
     // El resultado del login llega por este observable cuando Microsoft redirige de vuelta.
     this.msalService.handleRedirectObservable().subscribe({
-      next: (result) => {
+      next: async (result) => {
         if (result?.account) {
           this.msalService.instance.setActiveAccount(result.account);
 
           console.log('Usuario autenticado:', result.account);
+
+          // Se esperan los roles antes de navegar para que los guards ya los tengan.
+          await this.authService.loadRoles();
 
           this.router.navigate(['/dashboard']);
         }
@@ -39,7 +44,9 @@ export class App implements OnInit {
 
       console.log('Sesión existente:', accounts[0]);
 
-      this.router.navigate(['/dashboard']);
+      this.authService.loadRoles().then(() => {
+        this.router.navigate(['/dashboard']);
+      });
     }
   }
 }

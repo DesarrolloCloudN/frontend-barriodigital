@@ -28,13 +28,46 @@ export class AuthService {
     return this.msalService.instance.getActiveAccount();
   }
 
-  // Los roles vienen en idTokenClaims; si no hay, devolvemos arreglo vacío.
-  getRoles(): string[] {
-    const roles = this.msalService.instance.getActiveAccount()?.idTokenClaims?.[
-      'roles'
-    ];
+  private cachedRoles: string[] = [];
+
+  // Los roles se asignan sobre la app del BFF, asi que solo aparecen en el
+  // access token de esa API, no en el idToken del login. Se piden aparte y se cachean.
+  async loadRoles(): Promise<void> {
+    const account = this.getAccount();
+
+    if (!account) {
+      this.cachedRoles = [];
+      return;
+    }
+
+    try {
+      const result = await this.msalService.instance.acquireTokenSilent({
+        scopes: [environment.azure.api.scope],
+        account,
+      });
+
+      this.cachedRoles = this.decodeRolesFromAccessToken(result.accessToken);
+    } catch {
+      this.cachedRoles = [];
+    }
+  }
+
+  private decodeRolesFromAccessToken(accessToken: string): string[] {
+    const payload = accessToken.split('.')[1];
+    let base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+
+    while (base64.length % 4 !== 0) {
+      base64 += '=';
+    }
+
+    const claims = JSON.parse(atob(base64));
+    const roles = claims['roles'];
 
     return Array.isArray(roles) ? (roles as string[]) : [];
+  }
+
+  getRoles(): string[] {
+    return this.cachedRoles;
   }
 
   hasRole(role: string): boolean {
