@@ -18,7 +18,7 @@ export class DashboardComponent {
 
   roles = this.authService.getRoles();
 
-  puedeVerCatalogo = this.authService.hasRole('Admin');
+  puedeVerCatalogo = this.authService.hasAnyRole(['Admin', 'Funcionario']);
 
   logout(): void {
     this.authService.logout();

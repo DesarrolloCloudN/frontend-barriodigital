@@ -14,7 +14,7 @@ export interface Tramite {
   vecinoNombre: string;
   descripcion: string;
   estado: EstadoTramite;
-  responsableAsignado?: string | null;
+  funcionarioAsignado?: string | null;
   observaciones?: string | null;
   fechaIngreso: string;
   fechaActualizacion: string;
@@ -29,7 +29,7 @@ export interface CrearTramiteDto {
 
 export interface CambiarEstadoTramiteDto {
   estado: EstadoTramite;
-  responsableAsignado?: string;
+  funcionarioAsignado?: string;
   observaciones?: string;
 }
 

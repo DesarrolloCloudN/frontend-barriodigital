@@ -76,7 +76,7 @@
             <th>Cupo diario</th>
             <th>Cupo disponible hoy</th>
             <th>Activo</th>
-            @if (esAdmin) {
+            @if (puedeEditar) {
               <th>Acciones</th>
             }
           </tr>
@@ -114,7 +114,7 @@
                 <td>{{ tipo.activo ? 'Sí' : 'No' }}</td>
               }
 
-              @if (esAdmin) {
+              @if (puedeEditar) {
                 <td class="acciones">
                   @if (idEnEdicion() === tipo.id) {
                     <button
@@ -134,14 +134,16 @@
                       Editar
                     </button>
 
-                    <button
-                      type="button"
-                      class="btn btn-danger"
-                      [disabled]="eliminandoId() === tipo.id"
-                      (click)="eliminarTipoTramite(tipo)"
-                    >
-                      Eliminar
-                    </button>
+                    @if (esAdmin) {
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        [disabled]="eliminandoId() === tipo.id"
+                        (click)="eliminarTipoTramite(tipo)"
+                      >
+                        Eliminar
+                      </button>
+                    }
                   }
                 </td>
               }

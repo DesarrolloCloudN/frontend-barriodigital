@@ -6,7 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { ApiService } from '../../services/api.service';
 import { TipoTramite } from '../../models/tipo-tramite.model';
 
-// Catálogo de tipos de trámite: solo Admin puede crear, editar o eliminar.
+// Catálogo de tipos de trámite: Admin crea/edita/elimina, Funcionario solo edita.
 @Component({
   selector: 'app-catalog',
   standalone: true,
@@ -19,6 +19,8 @@ export class CatalogComponent implements OnInit {
   private apiService = inject(ApiService);
 
   esAdmin = this.authService.hasRole('Admin');
+
+  puedeEditar = this.authService.hasAnyRole(['Admin', 'Funcionario']);
 
   tipos = signal<TipoTramite[]>([]);
 

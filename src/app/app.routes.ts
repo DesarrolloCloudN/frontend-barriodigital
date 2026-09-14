@@ -37,10 +37,10 @@ export const routes: Routes = [
   },
 
   {
-    // El catálogo requiere rol Admin (lo valida roleGuard).
+    // El catálogo requiere rol Admin o Funcionario (lo valida roleGuard).
     path: 'catalog',
     canActivate: [MsalGuard, roleGuard],
-    data: { roles: ['Admin'] },
+    data: { roles: ['Admin', 'Funcionario'] },
     loadComponent: () =>
       import('./components/catalog/catalog').then((m) => m.CatalogComponent),
   },

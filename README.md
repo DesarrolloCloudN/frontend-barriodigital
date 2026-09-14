@@ -8,7 +8,8 @@ Este proyecto se generó con [Angular CLI](https://github.com/angular/angular-cl
 
 ## Roles
 
-- **Admin**: gestiona el catálogo de tipos de trámite, admite solicitudes y cambia el estado de los trámites.
+- **Admin**: define el catálogo de tipos de trámite y cupos, y gestiona todo el sistema.
+- **Funcionario**: admite solicitudes, cambia el estado de los trámites y actualiza cupos.
 - **Vecino**: ingresa y sigue únicamente sus propias solicitudes.
 
 ## Configuración previa

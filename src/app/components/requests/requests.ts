@@ -11,7 +11,7 @@ import {
   Tramite,
 } from '../../models/tramite.model';
 
-// Trámites: el vecino ve los suyos; Admin ve todos y cambia estados.
+// Trámites: el vecino ve los suyos; Admin/Funcionario ve todos y cambia estados.
 @Component({
   selector: 'app-requests',
   standalone: true,
@@ -23,7 +23,7 @@ export class RequestsComponent implements OnInit {
   private authService = inject(AuthService);
   private apiService = inject(ApiService);
 
-  puedeGestionar = this.authService.hasRole('Admin');
+  puedeGestionar = this.authService.hasAnyRole(['Admin', 'Funcionario']);
 
   tramites = signal<Tramite[]>([]);
 
