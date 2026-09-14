@@ -8,31 +8,18 @@ import { provideRouter } from '@angular/router';
 import {
   MSAL_GUARD_CONFIG,
   MSAL_INSTANCE,
-  MSAL_INTERCEPTOR_CONFIG,
   MsalBroadcastService,
   MsalGuard,
-  MsalInterceptor,
-  MsalInterceptorConfiguration,
   MsalService,
 } from '@azure/msal-angular';
 
 import { InteractionType } from '@azure/msal-browser';
 
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { MSALInstanceFactory } from './factories/msal-instance.factory';
-import { environment } from '../environments/environment';
-
-// Le dice al interceptor de MSAL a qué URLs debe agregarles el token automáticamente.
-const msalInterceptorConfig: MsalInterceptorConfiguration = {
-  interactionType: InteractionType.Redirect,
-
-  protectedResourceMap: new Map([
-    [`${environment.azure.api.url}/api/requests`, [environment.azure.api.scope]],
-    [`${environment.azure.api.url}/api/catalog`, [environment.azure.api.scope]],
-  ]),
-};
+import { authTokenInterceptor } from './interceptors/auth-token.interceptor';
 
 // MSAL exige inicializar la instancia antes de usarla (login, tokens, interceptor).
 // Con APP_INITIALIZER, Angular espera esto antes de activar rutas o componentes.
@@ -47,7 +34,7 @@ export const appConfig: ApplicationConfig = {
 
     provideRouter(routes),
 
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptors([authTokenInterceptor])),
 
     {
       provide: MSAL_INSTANCE,
@@ -70,17 +57,6 @@ export const appConfig: ApplicationConfig = {
           scopes: ['openid', 'profile'],
         },
       },
-    },
-
-    {
-      provide: MSAL_INTERCEPTOR_CONFIG,
-      useValue: msalInterceptorConfig,
-    },
-
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MsalInterceptor,
-      multi: true,
     },
 
     MsalService,
