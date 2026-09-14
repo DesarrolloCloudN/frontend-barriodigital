@@ -7,8 +7,9 @@ export function MSALInstanceFactory(): PublicClientApplication {
     auth: {
       clientId: environment.azure.clientId,
       authority: environment.azure.authority,
-      redirectUri: environment.azure.redirectUri,
-      postLogoutRedirectUri: environment.azure.redirectUri,
+      // Se usa el origin actual para que funcione tanto en localhost como en la IP de la EC2.
+      redirectUri: window.location.origin + '/',
+      postLogoutRedirectUri: window.location.origin + '/',
     },
 
     cache: {

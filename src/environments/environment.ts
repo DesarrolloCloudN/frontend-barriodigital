@@ -7,14 +7,12 @@ export const environment = {
 
     authority: 'https://login.microsoftonline.com/b993433f-439b-4f1b-a920-b4d91d2d8329',
 
-    redirectUri: 'http://localhost:4200/',
-
     api: {
       clientId: 'b3c7c3d4-427e-41c2-a2f1-f333156f1c81',
 
       scope: 'api://b3c7c3d4-427e-41c2-a2f1-f333156f1c81/access_as_user',
 
-      url: 'TODO-CONFIG', // URL de invocación del API Gateway (stage Desarrollo)
+      url: 'https://brchdis4d7.execute-api.us-east-1.amazonaws.com',
     },
   },
 };
