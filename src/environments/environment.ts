@@ -12,7 +12,7 @@ export const environment = {
 
       scope: 'api://b3c7c3d4-427e-41c2-a2f1-f333156f1c81/access_as_user',
 
-      url: 'https://brchdis4d7.execute-api.us-east-1.amazonaws.com',
+      url: 'https://59n2df37b4.execute-api.us-east-1.amazonaws.com',
     },
   },
 };
