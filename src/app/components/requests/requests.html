@@ -8,14 +8,13 @@
 
     <form (ngSubmit)="crearTramite()">
       <label>
-        Tipo de trámite (id):
-        <input
-          type="number"
-          name="tipoTramiteId"
-          [(ngModel)]="nuevoTipoTramiteId"
-          min="1"
-          required
-        />
+        Tipo de trámite:
+        <select name="tipoTramiteId" [(ngModel)]="nuevoTipoTramiteId" required>
+          <option [ngValue]="null" disabled>Selecciona un tipo de trámite</option>
+          @for (tipo of tiposTramite(); track tipo.id) {
+            <option [ngValue]="tipo.id">{{ tipo.nombre }}</option>
+          }
+        </select>
       </label>
 
       <label>

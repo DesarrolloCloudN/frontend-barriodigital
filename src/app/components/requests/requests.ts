@@ -10,6 +10,7 @@ import {
   TRANSICIONES_ESTADO,
   Tramite,
 } from '../../models/tramite.model';
+import { TipoTramite } from '../../models/tipo-tramite.model';
 
 // Trámites: el vecino ve los suyos; Admin/Funcionario ve todos y cambia estados.
 @Component({
@@ -29,6 +30,8 @@ export class RequestsComponent {
 
   tramites = signal<Tramite[]>([]);
 
+  tiposTramite = signal<TipoTramite[]>([]);
+
   cargando = signal(false);
 
   error = signal('');
@@ -46,6 +49,16 @@ export class RequestsComponent {
     effect(() => {
       this.puedeGestionar();
       this.cargarTramites();
+    });
+
+    this.cargarTiposTramite();
+  }
+
+  // Solo se listan los tipos activos: no tiene sentido ofrecer uno dado de baja al crear.
+  cargarTiposTramite(): void {
+    this.apiService.getCatalogo().subscribe({
+      next: (tipos) => this.tiposTramite.set(tipos.filter((tipo) => tipo.activo)),
+      error: () => this.tiposTramite.set([]),
     });
   }
 
